@@ -1,6 +1,5 @@
 from django.forms import ModelForm, BooleanField
-from django.core.exceptions import ValidationError
-from mailout.models import Clients, Message, Mailout
+from mailout.models import Clients, Message, Mailout, Attempt
 
 
 class ClientsForm(ModelForm):
@@ -76,6 +75,35 @@ class MailoutForm(ModelForm):
         })
 
 
+class ManagerForm(ModelForm):
+    class Meta:
+        model = Mailout
+        fields = ('status',)
+
+    def __init__(self, *args, **kwargs):
+
+        super(ManagerForm, self).__init__(*args, **kwargs)
+
+        self.fields['status'].widget.attrs.update({
+            'class': 'form-select',
+            'placeholder': 'Статус рассылки',
+        })
+
+
+class AttemptForm(ModelForm):
+    class Meta:
+        model = Attempt
+        fields = ('mailout',)
+
+    def __init__(self, *args, **kwargs):
+
+        super(AttemptForm, self).__init__(*args, **kwargs)
+
+        self.fields['mailout'].widget.attrs.update({
+            'class': 'form-select',
+            'multiple aria - label': "multiple select example",
+            'placeholder': 'Рассылка',
+        })
 
 
 class StyleFormsMixin:
