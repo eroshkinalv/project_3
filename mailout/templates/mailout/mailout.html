@@ -1,0 +1,84 @@
+{% extends 'mailout/base.html' %}
+
+{% block title %}Mailout{% endblock %}
+
+{% block content %}
+
+{% include 'mailout/header.html' %}
+
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Mailout</h1>
+    <p class="lead">Mailout - это сервис по управлению Вашими рассылками</p>
+</div>
+
+<div class="container">
+    <div class="row text-start">
+        <div class="col-lg-9 col-md-6 col-sm-12">
+            <div class="card mb-4 box-shadow">
+                <div class="card-body">
+                    {% if object %}
+                    <div class="card-header">
+                        <h4 class="card-title pricing-card-title text-start">{{ mailout.message.subject }}</h4>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                            <li>Сообщение: {{ mailout.message.message }}</li>
+                            <li>Получатели: {% for client in mailout.clients.all %} {{ client }} {% endfor %}</li>
+                            <li>Создана: {{ mailout.subscribed_at }}</li>
+                            <li>Завершена: {{ mailout.sent_at }}</li>
+                            <li>Запущена: {{ mailout.is_active }}</li>
+                            <li>Текущий статус: {{ mailout.status }}</li>
+                        </ul>
+                    </div>
+                    {% else %}
+                    <h4 class="my-0 font-weight-normal">Список рассылок</h4>
+                    <table class="table table-striped">
+                        {% for mail in mailout %}
+                        <tr>
+                            <td class="w-25">{{ mail.message }}</td>
+                            <td>{% for client in mail.clients.all %} {{ client }} {% endfor %}</td>
+                            <td>{{ mail.status }}</td>
+                            <td>{{ mail.subscribed_at }}</td>
+                            <td><p><a class="link-primary" href="{% url 'mailout:mailout_detail' mail.pk %}">Подробнее</a></p></td>
+                            <td><p><a class="link-primary" href="{% url 'mailout:mailout_update' mail.pk %}">Изменить</a></p></td>
+                            <td><p><a class="link-primary" href="{% url 'mailout:mailout_delete' mail.pk %}">Удалить</a></p></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    {% if object %}
+                    <h4 class="my-0 font-weight-normal">Изменить рассылку</h4>
+                    {% else %}
+                    <h4 class="my-0 font-weight-normal">Добавить новую рассылку</h4>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    {% if object %}
+                    <form method="post" enctype="multipart/form-data" class="form-floating" action="{% url 'mailout:mailout_update' mailout.pk %}">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+
+                        <button type="submit" class="p-2 btn btn-outline-primary">Сохранить</button>
+                        <a class="p-2 btn btn-outline-primary" href="{% url 'mailout:mailout' %}">Отмена</a>
+                    </form>
+                    {% else %}
+                    <form method="post" enctype="multipart/form-data" class="form-floating" action="{% url 'mailout:mailout_create' %}">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+
+                        <button type="submit" class="p-2 btn btn-outline-primary">Сохранить</button>
+                        <a class="p-2 btn btn-outline-primary" href="{% url 'mailout:mailout' %}">Отмена</a>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'mailout/base.html' %}
+
+{% block title %}Mailout{% endblock %}
+
+{% block content %}
+
+{% include 'mailout/header.html' %}
+
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Mailout</h1>
+</div>
+
+<div class="container">
+    <div class="row text-start">
+        <div class="col">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">Войти в личный кабинет</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data" class="form-floating">
+                        <div class="mb-3">
+                          {% csrf_token %}
+                          <label for="exampleFormControlInput1" class="form-label">Email:</label>
+                          <input type="email" class="form-control" id="exampleFormControlInput1" name="username" placeholder="name@example.com">
+                          <label for="inputPassword5" class="form-label">Пароль:</label>
+                          <input type="password" id="inputPassword5" class="form-control" name="password" aria-describedby="passwordHelpBlock" placeholder="Введите пароль">
+                        </div>
+                        <button type="submit" class="btn btn-lg btn-block btn-outline-primary mt-3">
+                            Войти
+                        </button>
+                        <a type="button" class="btn btn-lg btn-block btn-outline-primary mt-3" href="{% url 'mailout:home'%}" >Отмена</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
