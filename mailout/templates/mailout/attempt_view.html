@@ -1,0 +1,33 @@
+{% extends 'mailout/base.html' %}
+
+{% block title %}Mailout{% endblock %}
+
+{% block content %}
+
+{% include 'mailout/header.html' %}
+
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Mailout</h1>
+    <p class="lead">Mailout - это сервис по управлению Вашими рассылками</p>
+</div>
+
+<div class="container">
+    <div class="row text-center">
+        <div class="col">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h4 class="card-title pricing-card-title text-start">{{ attempt.mailout }}</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                        <li>{% for client in attempt.mailout.clients.all %} {{ client }} {% endfor %}</li>
+                        <li>{{ attempt.status }}</li>
+                        <li>{{ attempt.server_message }}</li>
+                        <li>{{ attempt.emailed_at }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

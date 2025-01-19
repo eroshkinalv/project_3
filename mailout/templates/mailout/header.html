@@ -1,28 +1,64 @@
 <header>
     <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
-        <h4 class="my-0 mr-md-auto font-weight-normal">Mailout</h4>
-        <nav class="ms-5">
-            <a class="p-2 btn btn-outline-primary" href="/home/">На главную</a>
-            {% if user.is_authenticated %}
-            <a class="p-2 btn btn-outline-primary" href="/clients/">Получатели рассылки</a>
-            <a class="p-2 btn btn-outline-primary" href="/message/">Управление сообщениями</a>
-            <a class="p-2 btn btn-outline-primary" href="/mailout/">Управление рассылками</a>
-            {% endif %}
+        <nav class="navbar bg-body-emphasis">
+          <div class="container-fluid">
+            <a class="navbar-brand fs-4 fw-semibold" href="/home/">Mailout</a>
+          </div>
         </nav>
 
+        {% if user.is_authenticated and user.is_blocked == False %}
+        <div class="dropdown">
+          <button class="btn btn-outline-secondary dropdown-toggle mx-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
+            </svg>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="p-2 link-dark" href="/clients/">Получатели</a></li>
+            <li><a class="p-2 link-dark" href="/message/">Сообщения</a></li>
+            <li><a class="p-2 link-dark" href="/mailout/">Рассылки</a></li>
+            <li><a class="p-2 link-dark" href="/attempt/">Попытки рассылки</a></li>
+            <li><a class="p-2 link-dark" href="/statistics/">Статистика</a></li>
+            {% if perms.user.managers %}
+            <li><a class="p-2 link-dark" href="{% url 'users:users_list' %}">Пользователи</a></li>
+            {% endif %}
+          </ul>
+        </div>
         <nav class="mx-auto me-2 p-2">
-            {% if user.is_authenticated %}
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-              <p><a class="link-primary me-md-2" href="#">Личный кабинет</a></p>
+        <div class="row text-start row-cols-1 row-cols-md-3 g-4 mx-5">
+            <a class="btn btn-outline-dark fw-semibold" href="/client/create/">Добавить нового получателя</a>
+            <a class="btn btn-outline-dark fw-semibold" href="/message/create/">Добавить новое сообщение</a>
+            <a class="btn btn-outline-dark fw-semibold" href="/mailout/create/">Добавить новую рассылку</a>
+        </div>
+        </nav>
+        {% endif %}
 
+        <nav class="mx-auto me-2 p-2">
+            {% if user.is_authenticated%}
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <nav class="navbar bg-body-emphasis">
+              <div class="container-fluid">
+                <a>
+                    {% if user.image.url %}
+                    <img src="{{ user.image.url }}" class="rounded-circle bg-light float-end mx-2" style="width: 3rem; height: 3rem;">
+                    {% else %}
+                    <img src="/media/profile_img/ava_001.png" class="rounded-circle bg-light float-end mx-2" style="width: 3rem; height: 3rem;"> {% endif %}
+                </a>
+                  {% if user.is_blocked == False %}
+                <a class="navbar-brand fs-5 fw-semibold" href="{% url 'users:users_detail' user.pk %}">{{ user.email }}</a>
+                  {% else %}
+                <a class="navbar-brand fs-5 fw-semibold" href="/home/">{{ user.email }}</a>
+                  {% endif %}
+              </div>
+            </nav>
             <form method="post" action="{% url 'users:logout' %}">
                 {% csrf_token %}
-                <button type="submit" class="p-2 btn btn-outline-primary">Выход</button>
+                <button type="submit" class="p-2 btn btn-outline-dark mt-2">Выход</button>
             </form>
             </div>
             {% else %}
-            <a class="p-2 btn btn-outline-primary mx-2" href="/users/create_user/">Регистрация</a>
-            <a class="p-2 btn btn-outline-primary" href="/users/login/">Вход</a>
+            <a class="p-2 btn btn-outline-dark mx-2" href="/users/create_user/">Регистрация</a>
+            <a class="p-2 btn btn-outline-dark" href="/users/login/">Вход</a>
             {% endif %}
         </nav>
     </div>

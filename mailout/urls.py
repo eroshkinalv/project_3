@@ -1,13 +1,16 @@
 from django.urls import path
 from mailout.apps import MailoutConfig
-from mailout.views import HomeListView, ClientsCreateView, ClientsUpdateView, MessageCreateView, ClientsListView, \
+from mailout.views import ClientsCreateView, ClientsUpdateView, MessageCreateView, ClientsListView, \
     MessageListView, MessageDetailView, MessageUpdateView, MessageDeleteView, ClientsDeleteView, ClientsDetailView, \
-    MailoutListView, MailoutCreateView, MailoutDetailView, MailoutUpdateView, MailoutDeleteView
+    MailoutListView, MailoutCreateView, MailoutDetailView, MailoutUpdateView, MailoutDeleteView, AttemptListView, \
+    AttemptCreateView, AttemptDetailView, AttemptUpdateView, AttemptDeleteView, HomeCreateView, HomeTemplateView, \
+    StatisticsTemplateView
 
 app_name = MailoutConfig.name
 
 urlpatterns = [
-    path('home/', HomeListView.as_view(), name='home'),
+    path('home/', HomeTemplateView.as_view(), name='home'),
+    path('home/create/', HomeCreateView.as_view(), name='home_create'),
 
     path('clients/', ClientsListView.as_view(), name='clients'),
     path('client/create/', ClientsCreateView.as_view(), name='client_create'),
@@ -26,5 +29,13 @@ urlpatterns = [
     path('mailout/<int:pk>/detail/', MailoutDetailView.as_view(), name='mailout_detail'),
     path('mailout/<int:pk>/update/', MailoutUpdateView.as_view(), name='mailout_update'),
     path('mailout/<int:pk>/delete/', MailoutDeleteView.as_view(), name='mailout_delete'),
+
+    path('attempt/', AttemptListView.as_view(), name='attempt'),
+    path('attempt/create/', AttemptCreateView.as_view(), name='attempt_create'),
+    path('attempt/<int:pk>/detail/', AttemptDetailView.as_view(), name='attempt_detail'),
+    path('attempt/<int:pk>/update/', AttemptUpdateView.as_view(), name='attempt_update'),
+    path('attempt/<int:pk>/delete/', AttemptDeleteView.as_view(), name='attempt_delete'),
+
+    path('statistics/', StatisticsTemplateView.as_view(), name='statistics'),
 
 ]
